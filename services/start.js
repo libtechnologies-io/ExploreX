@@ -87,12 +87,12 @@ function getBlock(rpc, n){
                     let progress = 0
                     fullBlock.result.tx.forEach((txid, txIndex) => {
                         setTimeout(() => {
-                            console.log(txid)
                             progress = progress + barIntervals
                             bar.update(progress);
                             processTransaction(rpc, txid)
                             if (txIndex == fullBlock.result.tx.length - 1){
-                                //bar.stop();
+                                bar.stop();
+                                database.update('status', 'blockheight', n)
                                 getBlock(rpc, n + 1)
                             }
                         }, 10 * txIndex)
