@@ -50,7 +50,7 @@ function sync(rpc){
 
     try {
         var localHeight = JSON.parse(fs.readFileSync('./database/status.json')).blockheight
-    } catch {
+    } catch (e) {
         fs.writeFileSync('./database/status.json', JSON.stringify(db_models.status))
         var localHeight = -1
     }
@@ -60,7 +60,7 @@ function sync(rpc){
             if (!res) log('red', 'Error within daemon')
             else initSync(rpc, res.result, localHeight)
         })
-    } catch {
+    } catch (e) {
         log('red', 'Unable to conenct to daemon> check your RPC cridentials and try again')
     }
 
