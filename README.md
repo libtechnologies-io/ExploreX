@@ -2,7 +2,7 @@
   <img src="docs/explorex.png" >
 </p>
 
-# ExploreX
+# ExploreX (In Development)
 
 * :blue_book: See the docs [here](https://github.com/libtechnologies-io/ExploreX/blob/master/docs)
 * :globe_with_meridians: Created by [L.I.B. Technologies](https://libtechnologies.io)
