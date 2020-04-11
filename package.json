@@ -1,0 +1,33 @@
+{
+  "name": "explorex",
+  "version": "1.0.0",
+  "description": "A universal cryptocurrency block explorer for utxo based coins",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libtechnologies-io/ExploreX.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "explorer",
+    "cryptocurrency"
+  ],
+  "author": "L.I.B. Technologies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/libtechnologies-io/ExploreX/issues"
+  },
+  "homepage": "https://github.com/libtechnologies-io/ExploreX#readme",
+  "dependencies": {
+    "bitcoind-rpc": "^0.8.1",
+    "bitcoinjs-lib": "^5.1.7",
+    "chalk": "^3.0.0",
+    "cli-progress": "^3.7.0",
+    "express": "^4.17.1",
+    "genesis-js": "git+https://github.com/wkibbler/genesis-js.git"
+  }
+}
