@@ -8,6 +8,12 @@ var database = require('../lib/database')
 var bitcoin = require('genesis-js')
 var cliProgress = require('cli-progress')
 
+var quit = false
+
+process.on('SIGINT', function() {
+    quit = true
+})
+
 module.exports = function() {
 
     if (!fs.existsSync('./database')) {
@@ -70,30 +76,32 @@ function initSync(rpc, daemonHeight, localHeight){
 
     log('yellow', `Starting sync at  ${localHeight + 1}`)
 
-    getBlock(rpc, localHeight + 1)
+    getBlock(rpc, localHeight + 1, daemonHeight)
+
+    process.stdout.write(`block ${localHeight} / ${daemonHeight} ...`)
 }
 
 
-function getBlock(rpc, n){
+function getBlock(rpc, n, target){
     //get full block deatils
     rpc.getBlockHash(n, function(err1, blockHash){
         if (!err1) {
             rpc.getBlock(blockHash.result, function(err2, fullBlock){
                 if (!err2) {
-                    console.log(`Block: ${n} hash: ${blockHash.result}`)
-                    const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-                    bar.start(100, 0);
-                    let barIntervals = 100 / fullBlock.result.tx.length
-                    let progress = 0
+                    process.stdout.clearLine();
+                    process.stdout.cursorTo(0);
+                    process.stdout.write(`block: ${n} / ${target} ...`)
                     fullBlock.result.tx.forEach((txid, txIndex) => {
                         setTimeout(() => {
-                            progress = progress + barIntervals
-                            bar.update(progress);
                             processTransaction(rpc, txid)
                             if (txIndex == fullBlock.result.tx.length - 1){
-                                bar.stop();
                                 database.update('status', 'blockheight', n)
-                                getBlock(rpc, n + 1)
+                                if (quit){
+                                    log('yellow', `\nStopping sync at block ${n}, index of block ${n} has been compleated. Sync will resume at block ${n + 1} \nStoping process ...`)
+                                    process.exit()
+                                } else {
+                                    getBlock(rpc, n + 1, target)
+                                }
                             }
                         }, 10 * txIndex)
                     })
